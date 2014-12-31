@@ -71,7 +71,7 @@ class RaftRx(ioflo.base.deeding.Deed):
 
 
 class RaftTx(ioflo.base.deeding.Deed):
-    Ioinit = {'road': '.raft.road'}
+    Ioinits = {'road': '.raft.road'}
 
     def action(self):
         self.road.value.serviceAllTx()
