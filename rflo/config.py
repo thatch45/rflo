@@ -10,6 +10,7 @@ import socket
 DEFAULTS = {
     'interface': '0.0.0.0',
     'port': '7750',
+    'cachedir': '/var/cache/rflo'
     }
 
 
