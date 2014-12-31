@@ -37,6 +37,10 @@ class RaftCli(ioflo.base.deeding.Deed):
                 default='7750',
                 type=int,
                 )
+        parser.add_argument(
+                '-i',
+                dest='id',
+                default=None)
         args = parser.parse_args()
         self.cli.value = args.__dict__
 
