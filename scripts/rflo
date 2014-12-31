@@ -5,3 +5,6 @@ import rflo.start
 def main():
     manager = rflo.start.Manager()
     manager.start()
+
+if __name__ == '__main__':
+    main()
