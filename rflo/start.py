@@ -13,7 +13,7 @@ class Manager(object):
     def start(self):
         ioflo.app.run.start(
                 name='rflo',
-                period='0.01',
+                period=0.01,
                 stamp=0.0,
                 filepath=self.floscript,
                 behaviors=self.behaviors,
