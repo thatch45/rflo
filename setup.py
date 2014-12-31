@@ -21,5 +21,9 @@ setup(name=NAME,
       url='https://github.com/thatch45/rflo',
       packages=[
           'rflo',
-          ]
+          ],
+      scripts=[
+          'scripts/rflo',
+          ],
+      package_data = {'rflo': ['*.flo']},
       )
