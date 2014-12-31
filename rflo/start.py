@@ -17,4 +17,5 @@ class Manager(object):
                 stamp=0.0,
                 filepath=self.floscript,
                 behaviors=self.behaviors,
+                verbose=2,
                 )
