@@ -52,7 +52,7 @@ class RaftConfig(ioflo.base.deeding.Deed):
         Read in the config
         '''
         self.opts.value = copy.deepcopy(DEFAULTS)
-        self.opts.update(self.cli.value)
+        self.opts.value.update(self.cli.value)
         path = '/etc/rflo/main'
         try:
             with io.open(path, 'rb') as fp_:
