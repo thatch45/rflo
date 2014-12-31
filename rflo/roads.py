@@ -6,9 +6,8 @@ import os
 from collections import deque
 
 import ioflo.base.deeding.Deed
-from raet import raeting, nacling
+from raet import raeting
 from raet.road.stacking import RoadStack
-from raet.road.estating import RemoteEstate
 import raet.keeping
 
 class RaftRoadStackSetup(ioflo.base.deeding.Deed):
@@ -17,7 +16,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
     '''
     Ioinits = {
             'inode': 'raft.',
-            'stack': 'road',
+            'road': 'road',
             'txmsgs': {'ipath': 'txmsgs',
                        'ival': deque()},
             'rxmsgs': {'ipath': 'rxmsgs',
@@ -49,7 +48,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         rxMsgs = self.rxmsgs.value
         keep = raet.keeping.Keep(basedirpath)
         ha = (self.opts.value['interface'], self.opts.value['port'])
-        self.stack.value = RoadStack(store=self.store,
+        self.road.value = RoadStack(store=self.store,
                                      keep=keep,
                                      name=name,
                                      uid=uid,
@@ -62,3 +61,17 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      rxMsgs=rxMsgs,
                                      period=3.0,
                                      offset=0.5)
+
+
+class RaftRx(ioflo.base.deeding.Deed):
+    Ioinits = {'road': '.raft.road'}
+
+    def action(self):
+        self.road.value.serviceAllRx()
+
+
+class RaftTx(ioflo.base.deeding.Deed):
+    Ioinit = {'road': '.raft.road'}
+
+    def action(self):
+        self.road.value.serviceAllTx()
