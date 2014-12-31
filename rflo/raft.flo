@@ -5,6 +5,7 @@ house rflo
 framer roadstack be active first setup
     frame setup
         enter
+            do raft cli
             do raft config
             do raft road stack setup
         go start
