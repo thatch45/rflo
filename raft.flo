@@ -1,0 +1,26 @@
+# Rflo main daemon
+
+house rflo
+
+framer roadstack be active first setup
+    frame setup
+        enter
+            do raft config
+            do raft road stack setup
+        go start
+    frame start
+        bid start inbound
+        bid start router
+        bid start outbound
+
+framer inbound be inactive first start
+    frame start
+        do raft rx
+
+framer router be inactive first start
+    frame start
+        do raft router
+
+framer outbound be inactive first start
+    frame start
+        do raft tx
