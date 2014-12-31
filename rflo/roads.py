@@ -46,10 +46,10 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         basedirpath = os.path.abspath(os.path.join(self.opts.value['cachedir'], 'raet'))
         txMsgs = self.txmsgs.value
         rxMsgs = self.rxmsgs.value
-        keep = raet.keeping.Keep(basedirpath)
+        #keep = raet.keeping.Keep(basedirpath)
         ha = (self.opts.value['interface'], self.opts.value['port'])
         self.road.value = RoadStack(store=self.store,
-                                     keep=keep,
+                                     #keep=keep,
                                      name=name,
                                      uid=uid,
                                      ha=ha,
@@ -60,7 +60,8 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      txMsgs=txMsgs,
                                      rxMsgs=rxMsgs,
                                      period=3.0,
-                                     offset=0.5)
+                                     offset=0.5,
+                                     dirpath=basedirpath)
 
 
 class RaftRx(ioflo.base.deeding.Deed):
