@@ -8,7 +8,7 @@ from collections import deque
 import ioflo.base.deeding
 from raet import raeting
 from raet.road.stacking import RoadStack
-import raet.keeping
+
 
 class RaftRoadStackSetup(ioflo.base.deeding.Deed):
     '''
