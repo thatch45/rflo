@@ -38,8 +38,8 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         kind = self.opts.value.get('kind', 'raft')
         role = self.opts.value['id']
         name = '{0}_{1}'.format(role, kind)
-        main = self.opts.value.get('raet_main', self.local.data.main)
-        mutable = self.opts.value.get('raet_mutable', self.local.data.mutable)
+        main = self.opts.value.get('raet_main', False)
+        mutable = self.opts.value.get('raet_mutable', False)
         always = self.opts.value.get('open_mode', False)
         mutable = mutable or always
         uid = None
