@@ -38,7 +38,7 @@ class RaftCli(ioflo.base.deeding.Deed):
                 type=int,
                 )
         args = parser.parse_args()
-        self.cli.value = dict(args)
+        self.cli.value = args.__dict__
 
 class RaftConfig(ioflo.base.deeding.Deed):
     '''
