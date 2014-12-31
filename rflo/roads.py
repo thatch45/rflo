@@ -5,7 +5,7 @@ The road stack behaviors
 import os
 from collections import deque
 
-import ioflo.base.deeding.Deed
+import ioflo.base.deeding
 from raet import raeting
 from raet.road.stacking import RoadStack
 import raet.keeping
