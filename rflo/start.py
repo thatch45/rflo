@@ -7,7 +7,7 @@ class Manager(object):
     Manage the main ioflo process
     '''
     def __init__(self):
-        self.behaviors = ['rflo.config', 'rflo.roads']
+        self.behaviors = ['rflo.config', 'rflo.roads', 'rflo.router']
         self.floscript = os.path.join(os.path.dirname(__file__), 'raft.flo')
 
     def start(self):
