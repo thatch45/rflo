@@ -8,6 +8,7 @@ from collections import deque
 import ioflo.base.deeding
 from raet import raeting
 from raet.road.stacking import RoadStack
+import raet.road.estating
 
 
 class RaftRoadStackSetup(ioflo.base.deeding.Deed):
@@ -67,6 +68,8 @@ class RaftRx(ioflo.base.deeding.Deed):
 
     def action(self):
         self.road.value.serviceAllRx()
+        while self.road.value.txmsgs:
+            print(self.road.value.txmsgs.popleft())
 
 
 class RaftTx(ioflo.base.deeding.Deed):
@@ -74,3 +77,21 @@ class RaftTx(ioflo.base.deeding.Deed):
 
     def action(self):
         self.road.value.serviceAllTx()
+
+
+class RaftAddRemote(ioflo.base.deeding.Deed):
+    Ioinits = {'road': '.raft.road',
+               'opts': '.etc.opts'}
+
+    def action(self):
+        '''
+        '''
+        if not self.opts.value.get('remote'):
+            return
+        self.statck.value.addRemote(
+                raet.road.estating.RemoteEstate(
+                    self.stack.value,
+                    ha=self.opts.value.get('remote')))
+
+        for remote in self.stack.value.nameRemotes:
+            self.stack.value.message('foobar', self.stack.value.nameRemotes[remote].uid)

@@ -8,6 +8,10 @@ framer roadstack be active first setup
             do raft cli
             do raft config
             do raft road stack setup
+        go remotes
+    frame remotes
+        enter
+            do raft add remotes
         go start
     frame start
         bid start inbound
