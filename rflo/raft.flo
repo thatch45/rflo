@@ -11,7 +11,7 @@ framer roadstack be active first setup
         go remotes
     frame remotes
         enter
-            do raft add remotes
+            do raft add remote
         go start
     frame start
         bid start inbound
