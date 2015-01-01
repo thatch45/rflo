@@ -41,6 +41,10 @@ class RaftCli(ioflo.base.deeding.Deed):
                 '-i',
                 dest='id',
                 default=None)
+        parser.add_argument(
+                '-r',
+                dest='remote',
+                default=None)
         args = parser.parse_args()
         self.cli.value = args.__dict__
 
