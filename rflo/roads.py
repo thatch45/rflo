@@ -99,5 +99,6 @@ class RaftAddRemote(ioflo.base.deeding.Deed):
                     self.road.value,
                     ha=ha))
 
-        for remote in self.road.value.nameRemotes:
-            self.road.value.message('foobar', self.road.value.nameRemotes[remote].uid)
+        for remote in self.road.value.remotes.values():
+            self.road.value.join(uid=remote.uid)
+            self.road.value.message('stuff', uid=uid)
