@@ -48,6 +48,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         txMsgs = self.txmsgs.value
         rxMsgs = self.rxmsgs.value
         ha = (self.opts.value['interface'], self.opts.value['port'])
+        keep = raet.road.keeping.RoadKeep()
         self.road.value = RoadStack(store=self.store,
                                      name=name,
                                      uid=uid,
@@ -55,6 +56,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      role=role,
                                      main=main,
                                      kind=kind,
+                                     keep=keep,
                                      mutable=mutable,
                                      txMsgs=txMsgs,
                                      rxMsgs=rxMsgs,
