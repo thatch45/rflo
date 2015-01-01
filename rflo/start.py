@@ -14,6 +14,7 @@ class Manager(object):
         ioflo.app.run.start(
                 name='rflo',
                 period=0.01,
+                real=True,
                 stamp=0.0,
                 filepath=self.floscript,
                 behaviors=self.behaviors,
