@@ -64,12 +64,13 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
 
 
 class RaftRx(ioflo.base.deeding.Deed):
-    Ioinits = {'road': '.raft.road'}
+    Ioinits = {'road': '.raft.road',
+               'rxmsgs': '.raft.rxmsgs'}
 
     def action(self):
         self.road.value.serviceAllRx()
-        while self.road.value.txmsgs:
-            print(self.road.value.txmsgs.popleft())
+        while self.rxmsgs.value:
+            print(self.rxmsgs.value.popleft())
 
 
 class RaftTx(ioflo.base.deeding.Deed):
@@ -88,10 +89,13 @@ class RaftAddRemote(ioflo.base.deeding.Deed):
         '''
         if not self.opts.value.get('remote'):
             return
-        self.statck.value.addRemote(
+        remote = self.opts.value['remote']
+        comps = remote.split(':')
+        ha = (comps[0], int(comps[1]))
+        self.road.value.addRemote(
                 raet.road.estating.RemoteEstate(
-                    self.stack.value,
-                    ha=self.opts.value.get('remote')))
+                    self.road.value,
+                    ha=ha))
 
-        for remote in self.stack.value.nameRemotes:
-            self.stack.value.message('foobar', self.stack.value.nameRemotes[remote].uid)
+        for remote in self.road.value.nameRemotes:
+            self.road.value.message('foobar', self.road.value.nameRemotes[remote].uid)
