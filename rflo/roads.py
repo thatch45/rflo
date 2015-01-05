@@ -29,7 +29,8 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         '''
         Assign default stack values
         '''
-        RoadStack.Bk = raeting.bodyKinds.msgpack
+        RoadStack.Fk = raeting.bodyKinds.nada
+        RoadStack.Ck = raeting.bodyKinds.nada
         RoadStack.JoinentTimeout = 0.0
 
     def action(self):
@@ -94,11 +95,9 @@ class RaftAddRemote(ioflo.base.deeding.Deed):
         remote = self.opts.value['remote']
         comps = remote.split(':')
         ha = (comps[0], int(comps[1]))
-        self.road.value.addRemote(
-                raet.road.estating.RemoteEstate(
-                    self.road.value,
-                    ha=ha))
+        remote = raet.road.estating.RemoteEstate(self.road.value, ha=ha)
+        remote.joined = True
+        remote.allowed = True
+        self.road.value.addRemote(remote)
 
-        for remote in self.road.value.remotes.values():
-            self.road.value.join(uid=remote.uid)
-            self.road.value.message('stuff', uid=uid)
+        self.road.value.message('it works!!!', remote.uid)
