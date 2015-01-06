@@ -6,7 +6,6 @@ import os
 from collections import deque
 
 import ioflo.base.deeding
-from raet import raeting
 from raet.road.stacking import RoadStack
 import raet.road.estating
 
@@ -29,8 +28,6 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         '''
         Assign default stack values
         '''
-        RoadStack.Fk = raeting.bodyKinds.nada
-        RoadStack.Ck = raeting.bodyKinds.nada
         RoadStack.JoinentTimeout = 0.0
 
     def action(self):
@@ -63,6 +60,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      rxMsgs=rxMsgs,
                                      period=3.0,
                                      offset=0.5,
+                                     auto=True,
                                      dirpath=basedirpath)
 
 
@@ -96,8 +94,109 @@ class RaftAddRemote(ioflo.base.deeding.Deed):
         comps = remote.split(':')
         ha = (comps[0], int(comps[1]))
         remote = raet.road.estating.RemoteEstate(self.road.value, ha=ha)
-        remote.joined = True
-        remote.allowed = True
         self.road.value.addRemote(remote)
 
-        self.road.value.message('it works!!!', remote.uid)
+
+class RaetRoadStackJoiner(ioflo.base.deeding.Deed):
+    '''
+    Initiates join transaction with master
+    FloScript:
+
+    do raet road stack joiner at enter
+    '''
+    Ioinits = {'inode': '.raft',
+               'stack': 'road',
+               'opts': '.etc.opts'}
+
+    def action(self, **kwa):
+        '''
+        Join with all masters
+        '''
+        stack = self.stack.value
+        if stack and isinstance(stack, RoadStack):
+            for remote in stack.remotes.values():
+                stack.join(uid=remote.uid, timeout=0.0)
+
+
+class RaetRoadStackJoined(ioflo.base.deeding.Deed):
+    '''
+    Updates status with .joined of zeroth remote estate (master)
+    FloScript:
+
+    do raet road stack joined
+    go next if joined in .raft.status
+
+    '''
+    Ioinits = {'inode': '.raft',
+               'stack': 'road',
+               'status': {'ipath': 'status', 'ival': {'joined': False,
+                                                      'allowed': False,
+                                                      'alived': False,
+                                                      'rejected': False,
+                                                      'idle': False,}}}
+
+    def action(self, **kwa):
+        '''
+        Update .status share
+        '''
+        stack = self.stack.value
+        joined = False
+        if stack and isinstance(stack, RoadStack):
+            if stack.remotes:
+                for remote in stack.remotes.values():
+                    joined = any([remote.joined for remote in stack.remotes.values()])
+        self.status.update(joined=joined)
+
+
+class RaetRoadStackAllower(ioflo.base.deeding.Deed):
+    '''
+    Initiates allow (CurveCP handshake) transaction with master
+    FloScript:
+
+    do raet road stack allower at enter
+
+    '''
+    Ioinits = {
+            'inode': '.raft',
+            'stack': 'stack'}
+
+    def action(self, **kwa):
+        '''
+        Receive any udp packets on server socket and put in rxes
+        Send any packets in txes
+        '''
+        stack = self.stack.value
+        if stack and isinstance(stack, RoadStack):
+            stack.allow(timeout=0.0)
+        return None
+
+
+class RaetRoadStackAllowed(ioflo.base.deeding.Deed):
+    '''
+    Updates status with .allowed of zeroth remote estate (master)
+    FloScript:
+
+    do raet road stack allowed
+    go next if allowed in .raft.status
+
+    '''
+    Ioinits = {
+            'inode': '.raft',
+            'stack': 'stack',
+            'status': {'ipath': 'status', 'ival': {'joined': False,
+                                                   'allowed': False,
+                                                   'alived': False,
+                                                   'rejected': False,
+                                                   'idle': False}}}
+
+    def action(self, **kwa):
+        '''
+        Update .status share
+        '''
+        stack = self.stack.value
+        allowed = False
+        if stack and isinstance(stack, RoadStack):
+            if stack.remotes:
+                for remote in stack.remotes.values():
+                    allowed = any([remote.allowed for remote in stack.remotes.values()])
+        self.status.update(allowed=allowed)

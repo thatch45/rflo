@@ -12,7 +12,25 @@ framer roadstack be active first setup
     frame remotes
         enter
             do raft add remote
-        go start
+        go join
+    frame join
+        print Joining...
+        enter
+            do raet road stack joiner per inode ".raft."
+        recur
+            do raet road stack joined per inode ".raft."
+
+        go next if joined in .salt.road.manor.status
+
+    frame allow
+        print Allowing...
+        enter
+            do raet road stack allower per inode ".raft."
+        recur
+            do raet road stack allowed per inode ".raft."
+
+        go next if allowed in .raft
+
     frame start
         bid start inbound
         bid start router
