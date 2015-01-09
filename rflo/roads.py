@@ -34,7 +34,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         '''
         Setup the roadstack, only cal this once with an enter
         '''
-        kind = self.opts.value.get('kind', 'raft')
+        kind = 1
         role = self.opts.value['id']
         name = '{0}_{1}'.format(role, kind)
         main = self.opts.value.get('raet_main', False)

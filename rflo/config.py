@@ -53,7 +53,8 @@ class RaftConfig(ioflo.base.deeding.Deed):
     Read in the config file
     '''
     Ioinits = {'opts': '.etc.opts',
-               'cli': '.etc.cli'}
+               'cli': '.etc.cli',
+               'remote': '.etc.remote'}
 
     def action(self):
         '''
@@ -69,3 +70,4 @@ class RaftConfig(ioflo.base.deeding.Deed):
             pass
         if not self.opts.value.get('id'):
             self.opts.value['id'] = socket.getfqdn()
+        self.remote.value = self.opts.value.get('remote', False)
