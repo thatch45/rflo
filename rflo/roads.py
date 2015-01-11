@@ -186,7 +186,7 @@ class RaetRoadStackAllowed(ioflo.base.deeding.Deed):
     '''
     Ioinits = {
             'inode': '.raft',
-            'stack': 'road',
+            'road': 'road',
             'status': {'ipath': 'status', 'ival': {'joined': False,
                                                    'allowed': False,
                                                    'alived': False,
