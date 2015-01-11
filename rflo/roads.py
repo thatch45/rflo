@@ -11,7 +11,7 @@ from raet.road.stacking import RoadStack
 import raet.road.estating
 
 
-class RaftRoadStackSetup(ioflo.base.deeding.Deed):
+class RaetRoadStackSetup(ioflo.base.deeding.Deed):
     '''
     Init the main road stack to use
     '''
@@ -63,7 +63,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      dirpath=basedirpath)
 
 
-class RaftRx(ioflo.base.deeding.Deed):
+class RaetRx(ioflo.base.deeding.Deed):
     '''
     Behavior to recive inbound messages
     '''
@@ -74,7 +74,7 @@ class RaftRx(ioflo.base.deeding.Deed):
         self.road.value.serviceAllRx()
 
 
-class RaftTx(ioflo.base.deeding.Deed):
+class RaetTx(ioflo.base.deeding.Deed):
     '''
     Behavior to send outbount messages
     '''
@@ -84,7 +84,7 @@ class RaftTx(ioflo.base.deeding.Deed):
         self.road.value.serviceAllTx()
 
 
-class RaftAddRemote(ioflo.base.deeding.Deed):
+class RaetAddRemote(ioflo.base.deeding.Deed):
     '''
     Behavior to add the remote specified in the config/cli
     '''
