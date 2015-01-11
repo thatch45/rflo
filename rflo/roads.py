@@ -37,16 +37,16 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
         kind = 1
         role = self.opts.value['id']
         name = '{0}_{1}'.format(role, kind)
-        main = self.opts.value.get('raet_main', False)
-        mutable = self.opts.value.get('raet_mutable', False)
-        always = self.opts.value.get('open_mode', False)
+        main = self.opts.value.get('raet_main', True)
+        mutable = self.opts.value.get('raet_mutable', True)
+        always = self.opts.value.get('open_mode', True)
         mutable = mutable or always
         uid = None
         basedirpath = os.path.abspath(os.path.join(self.opts.value['cachedir'], name))
         txMsgs = self.txmsgs.value
         rxMsgs = self.rxmsgs.value
         ha = (self.opts.value['interface'], self.opts.value['port'])
-        keep = raet.road.keeping.RoadKeep()
+        #keep = raet.road.keeping.RoadKeep(basedirpath=basedirpath)
         self.road.value = RoadStack(store=self.store,
                                      name=name,
                                      uid=uid,
@@ -54,7 +54,7 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
                                      role=role,
                                      main=main,
                                      kind=kind,
-                                     keep=keep,
+                                     #keep=keep,
                                      mutable=mutable,
                                      txMsgs=txMsgs,
                                      rxMsgs=rxMsgs,
@@ -93,7 +93,7 @@ class RaftAddRemote(ioflo.base.deeding.Deed):
         remote = self.opts.value['remote']
         comps = remote.split(':')
         ha = (comps[0], int(comps[1]))
-        remote = raet.road.estating.RemoteEstate(self.road.value, ha=ha)
+        remote = raet.road.estating.RemoteEstate(self.road.value, fuid=0, sid=0, ha=ha)
         self.road.value.addRemote(remote)
 
 
@@ -104,8 +104,7 @@ class RaetRoadStackJoiner(ioflo.base.deeding.Deed):
 
     do raet road stack joiner at enter
     '''
-    Ioinits = {'inode': '.raft',
-               'stack': 'road',
+    Ioinits = {'stack': '.raft.road',
                'opts': '.etc.opts'}
 
     def action(self, **kwa):
@@ -145,6 +144,7 @@ class RaetRoadStackJoined(ioflo.base.deeding.Deed):
             if stack.remotes:
                 for remote in stack.remotes.values():
                     joined = any([remote.joined for remote in stack.remotes.values()])
+                    print(joined)
         self.status.update(joined=joined)
 
 

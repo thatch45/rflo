@@ -12,30 +12,32 @@ framer roadstack be active first setup
     frame remotes
         enter
             do raft add remote
-        go join if .etc.remote
         go start
+
+    frame start
+        print Starting....
+        bid start inbound
+        bid start router
+        bid start outbound
+        go join if .etc.remote
+
     frame join
         print Joining...
         enter
-            do raet road stack joiner per inode ".raft."
+            do raet road stack joiner
         recur
-            do raet road stack joined per inode ".raft."
+            do raet road stack joined
 
         go next if joined in .raft.status
 
     frame allow
         print Allowing...
         enter
-            do raet road stack allower per inode ".raft."
+            do raet road stack allower
         recur
-            do raet road stack allowed per inode ".raft."
+            do raet road stack allowed
 
-        go next if allowed in .raft.status
-
-    frame start
-        bid start inbound
-        bid start router
-        bid start outbound
+        #go next if allowed in .raft.status
 
 framer inbound be inactive first start
     frame start
