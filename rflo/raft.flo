@@ -27,7 +27,6 @@ framer roadstack be active first setup
             do raet road stack joiner
         recur
             do raet road stack joined
-
         go next if joined in .raft.status
 
     frame allow
@@ -36,8 +35,11 @@ framer roadstack be active first setup
             do raet road stack allower
         recur
             do raet road stack allowed
+        go next if allowed in .raft.status
 
-        #go next if allowed in .raft.status
+    frame started
+        enter
+            do raet road stack started
 
 framer inbound be inactive first start
     frame start
