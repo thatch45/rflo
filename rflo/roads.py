@@ -1,10 +1,11 @@
 '''
 The road stack behaviors
 '''
-
+# Import python libs
 import os
 from collections import deque
 
+# Import raet/ioflo libs
 import ioflo.base.deeding
 from raet.road.stacking import RoadStack
 import raet.road.estating
@@ -63,16 +64,20 @@ class RaftRoadStackSetup(ioflo.base.deeding.Deed):
 
 
 class RaftRx(ioflo.base.deeding.Deed):
+    '''
+    Behavior to recive inbound messages
+    '''
     Ioinits = {'road': '.raft.road',
                'rxmsgs': '.raft.rxmsgs'}
 
     def action(self):
         self.road.value.serviceAllRx()
-        while self.rxmsgs.value:
-            print(self.rxmsgs.value.popleft())
 
 
 class RaftTx(ioflo.base.deeding.Deed):
+    '''
+    Behavior to send outbount messages
+    '''
     Ioinits = {'road': '.raft.road'}
 
     def action(self):
@@ -80,6 +85,9 @@ class RaftTx(ioflo.base.deeding.Deed):
 
 
 class RaftAddRemote(ioflo.base.deeding.Deed):
+    '''
+    Behavior to add the remote specified in the config/cli
+    '''
     Ioinits = {'road': '.raft.road',
                'opts': '.etc.opts'}
 
@@ -102,17 +110,16 @@ class RaetRoadStackJoiner(ioflo.base.deeding.Deed):
 
     do raet road stack joiner at enter
     '''
-    Ioinits = {'stack': '.raft.road',
-               'opts': '.etc.opts'}
+    Ioinits = {'road': '.raft.road'}
 
     def action(self, **kwa):
         '''
         Join with all masters
         '''
-        stack = self.stack.value
-        if stack and isinstance(stack, RoadStack):
-            for remote in stack.remotes.values():
-                stack.join(uid=remote.uid, timeout=0.0)
+        road = self.road.value
+        if road and isinstance(road, RoadStack):
+            for remote in road.remotes.values():
+                road.join(uid=remote.uid, timeout=0.0)
 
 
 class RaetRoadStackJoined(ioflo.base.deeding.Deed):
@@ -125,7 +132,7 @@ class RaetRoadStackJoined(ioflo.base.deeding.Deed):
 
     '''
     Ioinits = {'inode': '.raft',
-               'stack': 'road',
+               'road': 'road',
                'status': {'ipath': 'status', 'ival': {'joined': False,
                                                       'allowed': False,
                                                       'alived': False,
@@ -136,12 +143,12 @@ class RaetRoadStackJoined(ioflo.base.deeding.Deed):
         '''
         Update .status share
         '''
-        stack = self.stack.value
+        road = self.road.value
         joined = False
-        if stack and isinstance(stack, RoadStack):
-            if stack.remotes:
-                for remote in stack.remotes.values():
-                    joined = any([remote.joined for remote in stack.remotes.values()])
+        if road and isinstance(road, RoadStack):
+            if road.remotes:
+                for remote in road.remotes.values():
+                    joined = any([remote.joined for remote in road.remotes.values()])
         self.status.update(joined=joined)
 
 
@@ -155,16 +162,16 @@ class RaetRoadStackAllower(ioflo.base.deeding.Deed):
     '''
     Ioinits = {
             'inode': '.raft',
-            'stack': 'road'}
+            'road': 'road'}
 
     def action(self, **kwa):
         '''
         Receive any udp packets on server socket and put in rxes
         Send any packets in txes
         '''
-        stack = self.stack.value
-        if stack and isinstance(stack, RoadStack):
-            stack.allow(timeout=0.0)
+        road = self.road.value
+        if road and isinstance(road, RoadStack):
+            road.allow(timeout=0.0)
         return None
 
 
@@ -190,13 +197,12 @@ class RaetRoadStackAllowed(ioflo.base.deeding.Deed):
         '''
         Update .status share
         '''
-        stack = self.stack.value
+        road = self.road.value
         allowed = False
-        if stack and isinstance(stack, RoadStack):
-            if stack.remotes:
-                for remote in stack.remotes.values():
-                    allowed = any([remote.allowed for remote in stack.remotes.values()])
-                    print(allowed)
+        if road and isinstance(road, RoadStack):
+            if road.remotes:
+                for remote in road.remotes.values():
+                    allowed = any([remote.allowed for remote in road.remotes.values()])
         self.status.update(allowed=allowed)
 
 
@@ -205,11 +211,12 @@ class RaetRoadStackStarted(ioflo.base.deeding.Deed):
     Send a started ping to all remotes
     '''
     Ioinits = {
-            'stack': '.raft.road',
+            'road': '.raft.road',
             }
 
     def action(self):
         '''
+        Send an initial message on the connection
         '''
-        for remote in self.stack.value.remotes.values():
-            self.stack.value.message({'Started': True}, remote.uid)
+        for remote in self.road.value.remotes.values():
+            self.road.value.message({'Started': True}, remote.uid)
