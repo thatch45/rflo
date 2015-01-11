@@ -47,7 +47,7 @@ framer inbound be inactive first start
 
 framer router be inactive first start
     frame start
-        do raet router
+        do raft router
 
 framer outbound be inactive first start
     frame start
