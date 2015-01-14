@@ -19,6 +19,7 @@ import ioflo.base.deeding
 
 W_KEYS = ('owner', 'seq', 'data', 'key')
 
+
 class WriteRequest(ioflo.base.deeding.Deed):
     '''
     Send a write request to all nodes
@@ -43,21 +44,61 @@ class WriteRequest(ioflo.base.deeding.Deed):
                 self.tracks.value[msg['ctag']] = {
                         'owner': msg['owner'],
                         'seq': msg['seq'],
-                        'key': msg['key']}
+                        'key': msg['key'],
+                        'sender': sender}
 
 
 class WriteVeri(ioflo.base.deeding.Deed):
     '''
     Process an initial write request by broadcasting that the request is received
     '''
-    pass
+    Ioinits = {'bcast': '.raft.bcast',
+               'work': '.raft.work',
+               'votes': {
+                   'ipath': '.raft.votes',
+                   'ival': collections.defaultdict({})},
+              }
+    
+    def action(self):
+        '''
+        broadcast out the vote and set up the local vote tracking data
+        '''
+        if 'write_veri' in self.work.value:
+            while self.work.value['write_veri']:
+                msg, sender = self.work.value['write_veri'].popleft()
+                bmsg = {'share': 'write_vote', 'ctag': msg['ctag']}
+                self.bcast.value.append(bmsg)
+                self.votes.value[msg['ctag']]['msg'] = msg
+                if 'votes' in self.votes.value[msg['ctag']]:
+                    self.votes.value[msg['ctag']]['votes'].append('self')
+                else:
+                    self.votes.value[msg['ctag']]['votes'] = ['self']
 
 
 class WriteVote(ioflo.base.deeding.Deed):
     '''
     Tally the remote votes for a write
     '''
-    pass
+    Ioinits = {'bcast': '.raft.bcast',
+               'work': '.raft.work',
+               'votes': {
+                   'ipath': '.raft.votes',
+                   'ival': collections.defaultdict({})},
+              }
+
+    def action(self):
+        '''
+        Tally the votes and set a write flag if the data is ready to be
+        written
+        '''
+        if 'write_vote' in self.work.value:
+            while self.work.value['write_vote']:
+                msg, sender = self.work.value['write_vote'].popleft()
+                if 'votes' in self.votes.value[msg['ctag']]:
+                    self.votes.value[msg['ctag']]['votes'].append(sender)
+                else:
+                    self.votes.value[msg['ctag']]['votes'] = [sender]
+
 
 class Bcast(ioflo.base.deeding.Deed):
     '''
